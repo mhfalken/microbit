@@ -81,12 +81,12 @@ class bitbot:
                 pin16.write_digital(0)
             else:
                 pin16.write_digital(1)
-            return pin2.read_analog() / 10
+            return int(pin2.read_analog() / 10)
         else:   # XL
             if sensor == LEFT:
-                return pin2.read_analog() / 10
+                return int(pin2.read_analog() / 10)
             else:
-                return pin1.read_analog() / 10
+                return int(pin1.read_analog() / 10)
 
     def Sonar(self, max=100):
         """ Return cm """
