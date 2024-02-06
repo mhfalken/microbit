@@ -12,6 +12,7 @@ RIGHT = const(1)
 
 class bitbot:
     modelType = MODEL_AUTO
+    scale = 2
     sonar = pin15
     lastDist = 2000
 
@@ -21,6 +22,11 @@ class bitbot:
             i2c.read(0x1C, 1)[0]
         except:
             self.modelType = MODEL_CLASSIC
+        self.scale = 1
+        try:
+            speaker.on()
+        except:
+            self.scale = 4
 
     def SetModel(self, modelType):
         self.modelType = modelType
@@ -99,18 +105,16 @@ class bitbot:
             if self.sonar.read_digital() == 1:  # Ping cleared
                 break
             sleep_us(1)
-            if (i == 100):
-                break
+            if (i == 300):
+                return self.lastDist
             i += 1
-        if i == 100:
-            return self.lastDist
         start = ticks_us()
         i = 0
         while True:
             if self.sonar.read_digital() == 0:  # wait Echo
                 break
             sleep_us(1)
-            if i == (max/4):
+            if i == (max/self.scale):
                 break
             i += 1
         end = ticks_us()
